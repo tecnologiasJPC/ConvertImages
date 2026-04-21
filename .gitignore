@@ -16,6 +16,9 @@ nosetests.xml
 coverage.xml
 *.cover
 *.log
+*.avif
+*.webp
+*.jfif
 .git
 .mypy_cache
 .pytest_cache
