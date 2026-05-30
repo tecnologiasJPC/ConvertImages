@@ -15,3 +15,5 @@ A Python project for image conversion.
 
 Modify `main.py` to add your image conversion logic.
 All images in folder ImagesToConvert will be converted to PNG.
+
+Bat file included to automate this process.
