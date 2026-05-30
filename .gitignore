@@ -19,6 +19,7 @@ coverage.xml
 *.avif
 *.webp
 *.jfif
+*.png
 .git
 .mypy_cache
 .pytest_cache

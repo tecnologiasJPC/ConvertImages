@@ -5,6 +5,20 @@ INPUT_FOLDER  = Path("C:/Users/john_/Documents/PythonProjects/ConvertImages/Imag
 OUTPUT_FOLDER_WEBP = Path("C:/Users/john_/Documents/PythonProjects/ConvertImages/ImagesToConvert/Converted")    # Imágenes WebP convertidas
 FORMATS_WEBP      = {".webp", ".avif", ".jfif"} # formatos de conversion a PNG disponibles
 
+def delete_webp_images(images: list[Path]):
+    """Delete the source images that were passed for conversion."""
+    deleted_count = 0
+    for img_path in images:
+        try:
+            img_path.unlink()
+            deleted_count += 1
+        except Exception as exc:
+            print(f"❌ Failed to delete {img_path.name}: {exc}")
+
+    if deleted_count:
+        print(f"  🗑️  Deleted {deleted_count} original image(s) from webp_images.")
+
+
 def convert_webp_images(images: list[Path]):
     """Convierte imágenes WebP a PNG sin modificar el contenido."""
     if not images:
@@ -22,6 +36,8 @@ def convert_webp_images(images: list[Path]):
             img.convert("RGBA").save(output_path, "PNG")
 
     print(f"\n  ✅ Saved in: {OUTPUT_FOLDER_WEBP.resolve()}\n")
+    delete_webp_images(images)
+
 
 def process_folder():
 
