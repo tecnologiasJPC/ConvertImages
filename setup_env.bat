@@ -43,6 +43,39 @@ if errorlevel 1 (
     exit /b 1
 )
 
+if not exist "ImagesToConvert" (
+    echo Creating ImagesToConvert folder...
+    mkdir "ImagesToConvert"
+)
+
+set "shortcutPath=%CD%\ImagesToConvert\Convert.lnk"
+if not exist "%shortcutPath%" (
+    echo Creating shortcut to run main.py in ImagesToConvert...
+    set "targetPath=%CD%\.venv\Scripts\python.exe"
+    set "scriptPath=%CD%\main.py"
+    set "workingDir=%CD%"
+    set "tempVbs=%TEMP%\create_shortcut.vbs"
+
+    (echo Set shell = CreateObject("WScript.Shell")
+    echo Set shortcut = shell.CreateShortcut("%shortcutPath%")
+    echo shortcut.TargetPath = "%targetPath%"
+    echo shortcut.Arguments = """%scriptPath%"""
+    echo shortcut.WorkingDirectory = "%workingDir%"
+    echo shortcut.Description = "Run main.py from virtual environment"
+    echo shortcut.Save) > "%tempVbs%"
+
+    cscript //nologo "%tempVbs%"
+    if errorlevel 1 (
+        echo ERROR: Failed to create shortcut %shortcutPath%.
+        del "%tempVbs%" 2>nul
+        exit /b 1
+    )
+
+    del "%tempVbs%" 2>nul
+) else (
+    echo Shortcut already exists: %shortcutPath%
+)
+
 echo.
 echo Setup complete.
 echo To use the virtual environment, run:
