@@ -48,8 +48,11 @@ if not exist "ImagesToConvert" (
     mkdir "ImagesToConvert"
 )
 
-set "shortcutPath=%CD%\ImagesToConvert\Convert.lnk"
-if not exist "%shortcutPath%" (
+set "shortcutDir=%CD%\ImagesToConvert"
+set "shortcutPath=%shortcutDir%\Convert.lnk"
+
+dir /b "%shortcutDir%\*.lnk" >nul 2>&1
+if errorlevel 1 (
     echo Creating shortcut to run main.py in ImagesToConvert...
     set "targetPath=%CD%\.venv\Scripts\python.exe"
     set "scriptPath=%CD%\main.py"
@@ -73,7 +76,7 @@ if not exist "%shortcutPath%" (
 
     del "%tempVbs%" 2>nul
 ) else (
-    echo Shortcut already exists: %shortcutPath%
+    echo Shortcut already exists in %shortcutDir%.
 )
 
 echo.
