@@ -61,18 +61,18 @@ if errorlevel 1 (
     echo Creating shortcut to run main.py in ImagesToConvert...
 
     :: Resolve paths before writing VBS to avoid delayed expansion issues inside echo blocks
-    set "targetPath=%CD%\.venv\Scripts\python.exe"
-    set "scriptPath=%CD%\main.py"
-    set "workingDir=%CD%"
+    :: Use relative paths so the shortcut points to the project-relative .venv and main.py
+    set "targetPath=..\.venv\Scripts\python.exe"
+    set "scriptPath=..\main.py"
+    set "workingDir=.."
     set "tempVbs=%TEMP%\create_shortcut.vbs"
 
-    :: Write each line separately using regular %var% expansion (not delayed !var!)
-    :: This avoids the blank-variable bug that occurs inside parenthesised echo blocks
+    :: Write VBS lines using full %var% expansion (variables already resolved)
     echo Set shell = CreateObject("WScript.Shell") > "%tempVbs%"
     echo Set shortcut = shell.CreateShortcut("%shortcutPath%") >> "%tempVbs%"
-    echo shortcut.TargetPath = "%targetPath%" >> "%tempVbs%"
+    echo shortcut.TargetPath = """%targetPath%""" >> "%tempVbs%"
     echo shortcut.Arguments = """%scriptPath%""" >> "%tempVbs%"
-    echo shortcut.WorkingDirectory = "%workingDir%" >> "%tempVbs%"
+    echo shortcut.WorkingDirectory = """%workingDir%""" >> "%tempVbs%"
     echo shortcut.Description = "Run main.py from virtual environment" >> "%tempVbs%"
     echo shortcut.Save >> "%tempVbs%"
 
