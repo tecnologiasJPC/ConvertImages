@@ -59,27 +59,31 @@ set "shortcutPath=%shortcutDir%\Convert.lnk"
 dir /b "%shortcutDir%\*.lnk" >nul 2>&1
 if errorlevel 1 (
     echo Creating shortcut to run main.py in ImagesToConvert...
+
+    :: Resolve paths before writing VBS to avoid delayed expansion issues inside echo blocks
     set "targetPath=%CD%\.venv\Scripts\python.exe"
     set "scriptPath=%CD%\main.py"
     set "workingDir=%CD%"
     set "tempVbs=%TEMP%\create_shortcut.vbs"
 
-    (echo Set shell = CreateObject("WScript.Shell")
-    echo Set shortcut = shell.CreateShortcut("!shortcutPath!")
-    echo shortcut.TargetPath = "!targetPath!"
-    echo shortcut.Arguments = """!scriptPath!"""
-    echo shortcut.WorkingDirectory = "!workingDir!"
-    echo shortcut.Description = "Run main.py from virtual environment"
-    echo shortcut.Save) > "!tempVbs!"
+    :: Write each line separately using regular %var% expansion (not delayed !var!)
+    :: This avoids the blank-variable bug that occurs inside parenthesised echo blocks
+    echo Set shell = CreateObject("WScript.Shell") > "%tempVbs%"
+    echo Set shortcut = shell.CreateShortcut("%shortcutPath%") >> "%tempVbs%"
+    echo shortcut.TargetPath = "%targetPath%" >> "%tempVbs%"
+    echo shortcut.Arguments = """%scriptPath%""" >> "%tempVbs%"
+    echo shortcut.WorkingDirectory = "%workingDir%" >> "%tempVbs%"
+    echo shortcut.Description = "Run main.py from virtual environment" >> "%tempVbs%"
+    echo shortcut.Save >> "%tempVbs%"
 
-    cscript //nologo "!tempVbs!"
+    cscript //nologo "%tempVbs%"
     if errorlevel 1 (
-        echo ERROR: Failed to create shortcut !shortcutPath!.
-        del "!tempVbs!" 2>nul
+        echo ERROR: Failed to create shortcut %shortcutPath%.
+        del "%tempVbs%" 2>nul
         exit /b 1
     )
 
-    del "!tempVbs!" 2>nul
+    del "%tempVbs%" 2>nul
 ) else (
     echo Shortcut already exists in %shortcutDir%.
 )
