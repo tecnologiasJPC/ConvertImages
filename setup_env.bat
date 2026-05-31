@@ -48,6 +48,11 @@ if not exist "ImagesToConvert" (
     mkdir "ImagesToConvert"
 )
 
+if not exist "ImagesToConvert\Converted" (
+    echo Creating ImagesToConvert\Converted folder...
+    mkdir "ImagesToConvert\Converted"
+)
+
 set "shortcutDir=%CD%\ImagesToConvert"
 set "shortcutPath=%shortcutDir%\Convert.lnk"
 
