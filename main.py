@@ -1,9 +1,11 @@
 from pathlib import Path
 from PIL import Image
 
-INPUT_FOLDER  = Path("C:/Users/john_/Documents/PythonProjects/ConvertImages/ImagesToConvert")   # Carpeta con las imágenes originales
-OUTPUT_FOLDER_WEBP = Path("C:/Users/john_/Documents/PythonProjects/ConvertImages/ImagesToConvert/Converted")    # Imágenes WebP convertidas
-FORMATS_WEBP      = {".webp", ".avif", ".jfif"} # formatos de conversion a PNG disponibles
+PROJECT_ROOT = Path(__file__).resolve().parent
+INPUT_FOLDER = PROJECT_ROOT / "ImagesToConvert"
+OUTPUT_FOLDER_WEBP = INPUT_FOLDER / "Converted"
+FORMATS_WEBP = {".webp", ".avif", ".jfif"}  # formatos de conversion a PNG disponibles
+
 
 def delete_webp_images(images: list[Path]):
     """Delete the source images that were passed for conversion."""
