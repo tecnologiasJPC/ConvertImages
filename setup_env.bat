@@ -78,3 +78,4 @@ echo Setup complete.
 echo To use the virtual environment, run:
 echo     .venv\Scripts\activate
 endlocal
+pause
