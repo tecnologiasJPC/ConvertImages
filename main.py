@@ -1,6 +1,7 @@
 from pathlib import Path
 from PIL import Image
 
+# this script converts WebP, AVIF, and JFIF images to PNG format without modifying the content.
 PROJECT_ROOT = Path(__file__).resolve().parent
 INPUT_FOLDER = PROJECT_ROOT / "ImagesToConvert"
 OUTPUT_FOLDER_WEBP = INPUT_FOLDER / "Converted"
