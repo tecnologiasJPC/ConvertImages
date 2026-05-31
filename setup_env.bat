@@ -72,14 +72,14 @@ if errorlevel 1 (
     echo shortcut.Description = "Run main.py from virtual environment"
     echo shortcut.Save) > "!tempVbs!"
 
-    cscript //nologo "%tempVbs%"
+    cscript //nologo "!tempVbs!"
     if errorlevel 1 (
-        echo ERROR: Failed to create shortcut %shortcutPath%.
-        del "%tempVbs%" 2>nul
+        echo ERROR: Failed to create shortcut !shortcutPath!.
+        del "!tempVbs!" 2>nul
         exit /b 1
     )
 
-    del "%tempVbs%" 2>nul
+    del "!tempVbs!" 2>nul
 ) else (
     echo Shortcut already exists in %shortcutDir%.
 )
