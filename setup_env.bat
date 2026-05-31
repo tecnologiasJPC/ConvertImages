@@ -53,39 +53,24 @@ if not exist "ImagesToConvert\Converted" (
     mkdir "ImagesToConvert\Converted"
 )
 
+:: Crear acceso directo usando PowerShell (más confiable)
 set "shortcutDir=%CD%\ImagesToConvert"
 set "shortcutPath=%shortcutDir%\Convert.lnk"
 
-dir /b "%shortcutDir%\*.lnk" >nul 2>&1
-if errorlevel 1 (
-    echo Creating shortcut to run main.py in ImagesToConvert...
-
-    :: Resolve paths before writing VBS to avoid delayed expansion issues inside echo blocks
-    :: Use relative paths so the shortcut points to the project-relative .venv and main.py
-    set "targetPath=..\.venv\Scripts\python.exe"
-    set "scriptPath=..\main.py"
-    set "workingDir=.."
-    set "tempVbs=%TEMP%\create_shortcut.vbs"
-
-    :: Write VBS lines using full %var% expansion (variables already resolved)
-    echo Set shell = CreateObject("WScript.Shell") > "%tempVbs%"
-    echo Set shortcut = shell.CreateShortcut("%shortcutPath%") >> "%tempVbs%"
-    echo shortcut.TargetPath = """%targetPath%""" >> "%tempVbs%"
-    echo shortcut.Arguments = """%scriptPath%""" >> "%tempVbs%"
-    echo shortcut.WorkingDirectory = """%workingDir%""" >> "%tempVbs%"
-    echo shortcut.Description = "Run main.py from virtual environment" >> "%tempVbs%"
-    echo shortcut.Save >> "%tempVbs%"
-
-    cscript //nologo "%tempVbs%"
-    if errorlevel 1 (
-        echo ERROR: Failed to create shortcut %shortcutPath%.
-        del "%tempVbs%" 2>nul
-        exit /b 1
+if exist "%shortcutDir%" (
+    if not exist "%shortcutPath%" (
+        echo Creando acceso directo con PowerShell...
+        powershell -Command "$s=(New-Object -ComObject WScript.Shell).CreateShortcut('%shortcutPath%');$s.TargetPath='%CD%\.venv\Scripts\python.exe';$s.Arguments='%CD%\main.py';$s.WorkingDirectory='%CD%';$s.Save()"
+        if errorlevel 1 (
+            echo ERROR: No se pudo crear el acceso directo.
+        ) else (
+            echo Acceso directo creado en "%shortcutPath%"
+        )
+    ) else (
+        echo El acceso directo ya existe.
     )
-
-    del "%tempVbs%" 2>nul
 ) else (
-    echo Shortcut already exists in %shortcutDir%.
+    echo AVISO: La carpeta "%shortcutDir%" no existe. No se creará el acceso directo.
 )
 
 echo.
