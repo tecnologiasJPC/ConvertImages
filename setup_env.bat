@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal EnableDelayedExpansion
 
 :: Navigate to the repository root where this script lives
 cd /d "%~dp0"
@@ -65,12 +65,12 @@ if errorlevel 1 (
     set "tempVbs=%TEMP%\create_shortcut.vbs"
 
     (echo Set shell = CreateObject("WScript.Shell")
-    echo Set shortcut = shell.CreateShortcut("%shortcutPath%")
-    echo shortcut.TargetPath = "%targetPath%"
-    echo shortcut.Arguments = """%scriptPath%"""
-    echo shortcut.WorkingDirectory = "%workingDir%"
+    echo Set shortcut = shell.CreateShortcut("!shortcutPath!")
+    echo shortcut.TargetPath = "!targetPath!"
+    echo shortcut.Arguments = """!scriptPath!"""
+    echo shortcut.WorkingDirectory = "!workingDir!"
     echo shortcut.Description = "Run main.py from virtual environment"
-    echo shortcut.Save) > "%tempVbs%"
+    echo shortcut.Save) > "!tempVbs!"
 
     cscript //nologo "%tempVbs%"
     if errorlevel 1 (
