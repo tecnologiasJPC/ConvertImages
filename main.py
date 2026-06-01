@@ -65,5 +65,5 @@ def process_folder():
     print("🎉 Conversion completed successfully! 🎉\n")
 
 if __name__ == "__main__":
-    print("Converting images to PNG format...\n")
+    print("Converting images from web to PNG format...\n")
     process_folder()
