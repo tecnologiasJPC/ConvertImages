@@ -2,6 +2,8 @@
 
 A Python project for image conversion. It gets images from ImagesToConvert folder in format webp, avif, jfif to png.
 
+![example](example.gif)
+
 ## Setup
 
 1. Ensure Python is installed (version 3.7+ recommended).
