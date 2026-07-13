@@ -1,6 +1,6 @@
 # ConvertImages
 
-A Python project for image conversion.
+A Python project for image conversion. It gets images from ImagesToConvert folder in format webp, avif, jfif to png.
 
 ## Setup
 
